@@ -1,8 +1,12 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
+interface NextConfigExtended extends NextConfig {
+  experimental?: Record<string, unknown>; // allow any extra experimental props
+}
+
+const nextConfig: NextConfigExtended = {
   experimental: {
-    appDir: true, // <-- This enables the /app router
+    appDir: true,
   },
 };
 
