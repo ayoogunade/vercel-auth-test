@@ -1,33 +1,34 @@
-name: Deploy to Vercel (Prod)
+name: Deploy Next.js App to Vercel (Prod)
 
 on:
   push:
     branches:
-      - main
+      - main  # Trigger on pushes to main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the code
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      # Step 1: Checkout the repo
+      - uses: actions/checkout@v4
 
-      # Step 2: Install Node (Vercel CLI depends on Node)
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      # Step 2: Install Node.js (set your project Node version)
+      - uses: actions/setup-node@v3
         with:
-          node-version: 20
+          node-version: '20'  # match your local Node.js version
 
-      # Step 3: Install Vercel CLI
-      - name: Install Vercel CLI
-        run: npm install -g vercel
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm ci
 
-      # Step 4: Deploy to Vercel
+      # Step 4: Build the project
+      - name: Build Next.js
+        run: npm run build
+
+      # Step 5: Deploy to Vercel using neutral account token
       - name: Deploy to Vercel
-        run: |
-          vercel --prod --yes --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel --prod --yes --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
